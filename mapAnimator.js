@@ -34,7 +34,7 @@ window.onload = () =>
     var canvas = document.getElementById('mapCanvas');
     if (canvas.getContext) {
         var ctx = document.getElementById('mapCanvas').getContext('2d');
-        ctx.font = '48px serif';
+        ctx.font = '48px Roboto';
         ctx.fillText("Select a file to play", 10, 50);
     } 
     else 
