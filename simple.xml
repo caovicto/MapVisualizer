@@ -1,0 +1,29 @@
+<animation>
+	<frame>
+		<wall>1,1</wall>
+		<wall>1,2</wall>
+		<wall>1,3</wall>
+		<wall>1,4</wall>
+		<wall>1,5</wall>
+		<destination>3,5</destination>
+	</frame>
+	<frame>
+		<agent>2,3,0</agent>
+	</frame>
+	<frame>
+		<agent>2,4,0</agent>
+		<hotspot>2,5</hotspot>
+	</frame>
+	<frame>
+		<agent>2,5,0</agent>
+	
+	</frame>
+	<frame>
+		<agent>2,6,90</agent>
+	</frame>
+	<frame>
+		<clear>map</clear>
+		<clear>destination</clear>
+	</frame>
+
+</animation>
