@@ -193,6 +193,7 @@ function draw(frame) {
     for (var i = 0; i < hit.length; i++){
         let ctx = document.getElementById('noticeBoard').getContext('2d');
         ctx.font = '48px sans-serif';
+        ctx.style = 'Red';
         if (hit[i].innerHTML == "wall")
             ctx.fillText("HIT WALL", ctx.canvas.width/4, ctx.canvas.height/2);
         else if (hit[i].innerHTML == "hotspot")
