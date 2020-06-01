@@ -3,11 +3,20 @@ body
     background-color: white;
 }
 
-h1
+.header {
+    padding: 60px;
+    text-align: center;
+    background: rgb(104, 103, 181);
+    color: white;
+    font-size: 30px;
+    font-family: 'Roboto', sans-serif;
+}
+
+label
 {
     font-family:'Roboto',sans-serif;
     font-weight:400;
-    font-size: 48px; 
+    font-size: 16px; 
 }
 
 .timer
@@ -26,6 +35,71 @@ h1
     z-index: 0;
 }
 
+.container
+{
+    background:#D9F0FF;
+}
+
+
+/*** INPUT ***/
+
+.hide_file {
+    position: absolute;
+    z-index: 1000;
+    opacity: 0;
+    cursor: pointer;
+    right: 0;
+    top: 0;
+    height: 100%;
+    font-size: 24px;
+    width: 100%;
+}
+
+.custom-input 
+{
+    color: transparent;
+}
+
+.custom-input::-webkit-file-upload-button 
+{
+    visibility: hidden;
+}
+
+.custom-input::before 
+{
+    content: 'Select file';
+    display:inline-block;
+    padding:0.5em 3em;
+    border:0.16em solid #FFFFFF;
+    margin:0 0.3em 0.3em 0;
+    box-sizing: border-box;
+    text-decoration:none;
+    text-transform:uppercase;
+    background-color: rgb(104, 103, 181);
+    font-family:'Roboto',sans-serif;
+    font-weight:400;
+    color:#FFFFFF;
+    text-align:center;
+    transition: all 0.15s;
+}
+
+.custom-input:hover::before 
+{
+color:#DDDDDD;
+border-color:rgb(228, 216, 223)
+}
+
+.custom-input:active 
+{
+color:#BBBBBB;
+border-color:rgb(228, 216, 223);
+}
+
+.custom-input:active::before 
+{
+background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}
+  
 
 button
 {

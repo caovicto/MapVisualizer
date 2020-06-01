@@ -28,12 +28,13 @@ var currDestination = null;
 var currHotspots = [];
 
 
+
 window.onload = () =>
 {
     var canvas = document.getElementById('mapCanvas');
     if (canvas.getContext) {
         var ctx = document.getElementById('mapCanvas').getContext('2d');
-        ctx.font = '48px Roboto';
+        ctx.font = '48px sans-serif';
         ctx.fillText("Select a file to play", 10, 50);
     } 
     else 
@@ -131,6 +132,19 @@ function reset()
     clearHighlight();
     clearNotice();
     clearAgent();
+
+    var fullPath = document.getElementById('input').value;
+    if (fullPath) {
+        var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+        var filename = fullPath.substring(startIndex);
+        if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+            filename = filename.substring(1);
+        }
+        var ctx = document.getElementById('mapCanvas').getContext('2d');
+        ctx.font = '48px sans-serif';
+        ctx.fillText(filename, 10, 50);
+    }
+    
 }
 
 
@@ -178,7 +192,7 @@ function draw(frame) {
 
     for (var i = 0; i < hit.length; i++){
         let ctx = document.getElementById('noticeBoard').getContext('2d');
-        ctx.font = '48px Roboto';
+        ctx.font = '48px sans-serif';
         if (hit[i].innerHTML == "wall")
             ctx.fillText("HIT WALL", ctx.canvas.width/4, ctx.canvas.height/2);
         else if (hit[i].innerHTML == "hotspot")
@@ -210,6 +224,9 @@ function clearMap()
 {
     let ctx = document.getElementById('mapCanvas').getContext('2d');
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    currHotspots = [];
+    currDestination = null;
 }
 
 function clearHighlight()
@@ -235,7 +252,7 @@ function clearAgent()
 function drawDestination(x, y)
 {
     let ctx = document.getElementById('mapCanvas').getContext('2d');
-    ctx.fillStyle = "rgb(240, 132, 98)";
+    ctx.fillStyle = "#A3D5FF";
     ctx.fillRect(x*scale, y*scale, scale, scale);
 
     currDestination = [x, y];
@@ -260,7 +277,7 @@ function drawWall(x, y)
 function drawHotspot(x, y)
 {
     let ctx = document.getElementById('mapCanvas').getContext('2d');
-    ctx.fillStyle = "Pink";
+    ctx.fillStyle = "#EAD7E3";
     ctx.fillRect(x*scale, y*scale, scale, scale);
 
     currHotspots.push([x, y]);
@@ -268,7 +285,7 @@ function drawHotspot(x, y)
 function highlightHotspot()
 {
     let ctx = document.getElementById('highlightCanvas').getContext('2d');
-    ctx.fillStyle = "Red";
+    ctx.fillStyle = "#9F5683";
 
     for (var i = 0; i < currHotspots.length; i++)
     {

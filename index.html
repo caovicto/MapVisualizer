@@ -4,28 +4,39 @@
 <html lang="en">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="mapAnimator.js"></script>
 
+ 
     <link rel="stylesheet" href="styles.css">
+    
 </head>
 <body>
 
+    <div class="header">
+        <h1>2D MAP VISUALIZER</h1>
+        <p>MABE visualization tool</p>
+    </div>
 
     <div class="container">
-        <h1> MAPWORLD VISUALIZER </h1>
         <div class="row">
             <div class="col-xs-12 col-md-8">
-                <input id="input" type="file" onchange="reset()">
-                <button id="playBTN" onclick="play()">Play</button>
-                <button id="pauseBTN" onclick="pause()">Pause</button>
+                <input class="custom-input" id="input" type="file" onchange="reset()">
+            
             </div>
             <div class="col-xs-12 col-md-8">
-                <label for="speed">Speed:</label>
+                <button id="playBTN" onclick="play()">Play</button>
+                <button id="pauseBTN" onclick="pause()">Pause</button>
+                <button id="resetBTN" onclick="reset()">Reset</button>
+            </div>
+            <div class="col-xs-12 col-md-8"></div>
+                <label for="speed">Speed: </label>
                 <input type="number" id="speed" name="speed" step="1" value="2" onchange="startAnimating()">
             </div>
         </div>
         <div class="row">
             <div class="col-xs-12 col-md-8">
+                <label for="timer">Frame: </label>
                 <div id="timer" class="timer"></div>
             </div>
         </div>
