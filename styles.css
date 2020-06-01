@@ -15,7 +15,15 @@ h1
     font-family:'Roboto',sans-serif;
     font-weight:400;
     font-size: x-large;
-    text-align: center;
+    text-align: left;
+}
+
+.layer
+{
+    position: absolute; 
+    left: 0; 
+    top: 0; 
+    z-index: 0;
 }
 
 

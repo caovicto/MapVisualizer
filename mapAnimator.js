@@ -24,9 +24,8 @@ var animateID = null;
 var sourceFile = null;
 var frames = null;
 var frameIndex = 0;
-var lastCoordinates = null;
-var lastDestination = null;
-var lastHotspots = [];
+var currDestination = null;
+var currHotspots = [];
 
 
 window.onload = () =>
@@ -66,7 +65,7 @@ function play(){
 
     reader.onload = function(e) {
         let ctx = document.getElementById('mapCanvas').getContext('2d');
-        ctx.clearRect(0, 0, 1000, 1600); // clear the canvas
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 
         readXml=e.target.result;
@@ -77,6 +76,7 @@ function play(){
         frames = doc.getElementsByTagName("frame");
 
         stop = false;
+
         animate();
         
     }
@@ -118,18 +118,33 @@ function animate()
 
 }
 
+function reset()
+{
+    sourceFile = null;
+    frames = null;
+    frameIndex = 0;
+    currDestination = null;
+    currHotspots = [];
+    timer = 0;
+    
+    clearMap();
+    clearHighlight();
+    clearNotice();
+    clearAgent();
+}
 
 
 function draw(frame) {
-    console.log(lastHotspots);
-    clearHotspots();
-    lastHotspots = [];
+    clearNotice();
+    clearHighlight();
 
     var clears = frame.getElementsByTagName("clear");
     var walls = frame.getElementsByTagName("wall");
     var agent = frame.getElementsByTagName("agent");
     var hotspots = frame.getElementsByTagName("hotspot");
     var destination = frame.getElementsByTagName("destination");
+    var hit = frame.getElementsByTagName("hit");
+    var highlights = frame.getElementsByTagName("highlight");
 
 
     for (var i = 0; i < walls.length; i++){
@@ -140,14 +155,12 @@ function draw(frame) {
 
     for (var i = 0; i < agent.length; i++){
         let coordinates = agent[i].innerHTML.split(',');
-        console.log(coordinates[2])
         drawAgent(coordinates[0], coordinates[1], coordinates[2]);
     }
 
     for (var i = 0; i < hotspots.length; i++){
         let coordinates = hotspots[i].innerHTML.split(',');
         drawHotspot(coordinates[0], coordinates[1]);
-        lastHotspots.push([coordinates[0], coordinates[1]]);
     }
 
     for (var i = 0; i < destination.length; i++){
@@ -155,12 +168,30 @@ function draw(frame) {
         drawDestination(coordinates[0], coordinates[1]);
     }
 
+
+    for (var i = 0; i < highlights.length; i++){
+        if (highlights[i].innerHTML == "destination")
+            highlightDest();
+        else if (highlights[i].innerHTML == "hotspot")
+            highlightHotspot();
+    }
+
+    for (var i = 0; i < hit.length; i++){
+        let ctx = document.getElementById('noticeBoard').getContext('2d');
+        ctx.font = '48px Roboto';
+        if (hit[i].innerHTML == "wall")
+            ctx.fillText("HIT WALL", ctx.canvas.width/4, ctx.canvas.height/2);
+        else if (hit[i].innerHTML == "hotspot")
+            ctx.fillText("HIT HOTSPOT", ctx.canvas.width/2, ctx.canvas.height/2);
+
+        console.log(hit[i]);
+    }
+
     for (var i = 0; i < clears.length; i++){
         if (clears[i].innerHTML == "map")
             clearCanvas();
-        else if (clears[i].innerHTML == "destination")
-            clearDestination();
-        timer = 0;
+        else if (clears[i].innerHTML == "timer")
+            timer = 0;
     }
 
     document.getElementById('timer').innerHTML = timer;
@@ -175,34 +206,31 @@ function pause()
 
 
 /// animation
-function clearCanvas()
+function clearMap()
 {
     let ctx = document.getElementById('mapCanvas').getContext('2d');
-    ctx.clearRect(0, 0, 1000, 1600);
-    lastCoordinates = null;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-function clearDestination()
+function clearHighlight()
 {
-    let ctx = document.getElementById('mapCanvas').getContext('2d');
-
-    if (lastDestination)
-    {
-        ctx.clearRect(0, 0, scale, scale);
-    }
+    let ctx = document.getElementById('highlightCanvas').getContext('2d');
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-function clearHotspots()
+function clearNotice()
 {
-    let ctx = document.getElementById('mapCanvas').getContext('2d');
-
-    for (var i = 0; i < lastHotspots.length; i++)
-    {
-        ctx.clearRect(lastHotspots[i][0]*scale, lastHotspots[i][1]*scale, scale, scale);
-    }
-
-    lastHotspots = [];
+    let ctx = document.getElementById('noticeBoard').getContext('2d');
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
+
+function clearAgent()
+{
+    let ctx = document.getElementById('agentCanvas').getContext('2d');
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+}
+
+
 
 function drawDestination(x, y)
 {
@@ -210,7 +238,15 @@ function drawDestination(x, y)
     ctx.fillStyle = "rgb(240, 132, 98)";
     ctx.fillRect(x*scale, y*scale, scale, scale);
 
-    lastDestination = [x, y];
+    currDestination = [x, y];
+}
+
+function highlightDest()
+{
+    let ctx = document.getElementById('highlightCanvas').getContext('2d');
+    ctx.fillStyle = "Green";
+
+    ctx.fillRect(currDestination[0]*scale, currDestination[1]*scale, scale, scale);
 }
 
 
@@ -224,19 +260,29 @@ function drawWall(x, y)
 function drawHotspot(x, y)
 {
     let ctx = document.getElementById('mapCanvas').getContext('2d');
-    ctx.fillStyle = "Red";
+    ctx.fillStyle = "Pink";
     ctx.fillRect(x*scale, y*scale, scale, scale);
+
+    currHotspots.push([x, y]);
 }
+function highlightHotspot()
+{
+    let ctx = document.getElementById('highlightCanvas').getContext('2d');
+    ctx.fillStyle = "Red";
+
+    for (var i = 0; i < currHotspots.length; i++)
+    {
+        ctx.fillRect(currHotspots[i][0]*scale, currHotspots[i][1]*scale, scale, scale);
+    }
+}
+
 
 
 function drawAgent(x, y, degrees)
 {
-    let ctx = document.getElementById('mapCanvas').getContext('2d');
+    clearAgent();
 
-    if (lastCoordinates)
-    {
-        ctx.clearRect(lastCoordinates[0]*scale, lastCoordinates[1]*scale, scale, scale);
-    }
+    let ctx = document.getElementById('agentCanvas').getContext('2d');
 
     if(degrees == 0)
     {
@@ -269,17 +315,4 @@ function drawAgent(x, y, degrees)
     lastCoordinates = [x, y];
 }
 
-
-
-function sprite (options) {
-                
-    var that = {};
-                    
-    that.context = options.context;
-    scale = options.width;
-    scale = options.height;
-    that.image = options.image;
-
-    return that;
-}
 

@@ -15,12 +15,11 @@
         <h1> MAPWORLD VISUALIZER </h1>
         <div class="row">
             <div class="col-xs-12 col-md-8">
-                <input id="input" type="file">
+                <input id="input" type="file" onchange="reset()">
                 <button id="playBTN" onclick="play()">Play</button>
                 <button id="pauseBTN" onclick="pause()">Pause</button>
             </div>
             <div class="col-xs-12 col-md-8">
-                <div id="line"></div>
                 <label for="speed">Speed:</label>
                 <input type="number" id="speed" name="speed" step="1" value="2" onchange="startAnimating()">
             </div>
@@ -28,8 +27,14 @@
         <div class="row">
             <div class="col-xs-12 col-md-8">
                 <div id="timer" class="timer"></div>
-                <canvas id="mapCanvas" width="1600" height="1000"></canvas>
             </div>
+        </div>
+        <div class="row" style="position: relative;">
+            <canvas id="mapCanvas" class="layer" width="1600" height="1000"></canvas>
+            <canvas id="highlightCanvas" class="layer" width="1600" height="1000"></canvas>
+            <canvas id="agentCanvas" class="layer" width="1600" height="1000"></canvas>
+
+            <canvas id="noticeBoard" class="layer" width="1600" height="1000"></canvas>
         </div>
     </div>
 
