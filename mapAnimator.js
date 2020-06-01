@@ -126,7 +126,7 @@ function reset()
     currDestination = null;
     currHotspots = [];
     timer = 0;
-    
+
     clearMap();
     clearHighlight();
     clearNotice();
@@ -189,7 +189,7 @@ function draw(frame) {
 
     for (var i = 0; i < clears.length; i++){
         if (clears[i].innerHTML == "map")
-            clearCanvas();
+            clearMap();
         else if (clears[i].innerHTML == "timer")
             timer = 0;
     }
